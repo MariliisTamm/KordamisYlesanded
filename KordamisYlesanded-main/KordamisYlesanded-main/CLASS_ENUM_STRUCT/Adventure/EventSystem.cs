@@ -3,16 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Adventure.Player;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Adventure
 {
     public class EventSystem
     {
-        public static void NextEncounter(Player palyer, World map)
+        public static void NextEncounter(Player player, World map)
         {
-            Point2D playerlocation = Player.Location;
-            int result = map.Map[playerlocation.X, playerlocation.Y]
+            Point2D playerlocation = player.Location;
+            int result = map.Map[playerlocation.X, playerlocation.Y];
             switch (result)
             {
                 case 1:
@@ -37,7 +38,6 @@ namespace Adventure
                     break;
             }
         }
-
         public static void NextEncounter(Player player, Random rng)
         {
             int nextEncounterInt = rng.Next(1, 7);
@@ -244,15 +244,14 @@ namespace Adventure
             }
         }
 
-        internal static void NextLocation(Player player)
+        internal static void NextLocation(Player player, World map)
         {
-            int mapXmax = map.Map.GetLenght(0);
-            int mapYmax = map.Map.GetLenght(1);
-
-            Console.WriteLine("Kuhu sa edasi tahad minna? vali suund(kirjuta täht): ");
-            Console.WriteLine(" N ");
-            Console.WriteLine(" W + E ");
-            Console.WriteLine(" S ");
+            int mapXmax = map.Map.GetLength(0) - 1;
+            int mapYmax = map.Map.GetLength(1) - 1;
+            Console.WriteLine("Kuhu sa edasi minna tahad? vali suund (kirjuta täht):");
+            Console.WriteLine("  N  ");
+            Console.WriteLine("W + E");
+            Console.WriteLine("  S  ");
             string response = Console.ReadLine();
             switch (response)
             {
@@ -265,25 +264,34 @@ namespace Adventure
                     player.Location = new Point2D(player.Location.X, nextLocationS);
                     break;
                 case "W":
-                    int nextLocationW = CheckCandidate(mapXmax, player.Location.X - 1);
+                    int nextLocationW = CheckCandidate(mapXmax, player.Location.X - 1, true);
                     player.Location = new Point2D(nextLocationW, player.Location.Y);
                     break;
-                case "W":
-                    int nextLocationE = CheckCandidate(mapXmax, player.Location.X - 1);
+                case "E":
+                    int nextLocationE = CheckCandidate(mapXmax, player.Location.X + 1);
                     player.Location = new Point2D(nextLocationE, player.Location.Y);
+                    break;
+                default:
                     break;
             }
         }
+        /// <summary>
+        /// Checks if the player location exceeds maximum value, and returns int 0 as 
+        /// next location if it does exceed.
+        /// </summary>
+        /// <param name="maxvalue">value to compare against</param>
+        /// <param name="playerFutureLocation">players future location</param>
+        /// <returns>new value to set player at.</returns>
         private static int CheckCandidate(int maxvalue, int playerFutureLocation, bool checkMinimum = false)
         {
             if (checkMinimum == false)
             {
                 if (playerFutureLocation > maxvalue)
                 {
-                    //telepordib
+                    //telepordib teise serva
                     return 0;
-                    //peatub seina ees
-                    //return maxvalue
+                    ////peatab seina ees
+                    //return maxvalue;
                 }
                 else
                 {
@@ -294,15 +302,29 @@ namespace Adventure
             {
                 if (playerFutureLocation < 0)
                 {
-                    //telepordib
+                    //telepordib teise serva
                     return maxvalue;
-                    //peatub seina ees
-                    //return maxvalue
+                    ////peatab seina ees
+                    //return 0;
                 }
                 else
                 {
                     return playerFutureLocation;
                 }
+            }
+
+
+        }
+
+        internal static bool CheckWin(Point2D location, Point2D goal)
+        {
+            if (location.ToString() == goal.ToString())
+            {
+                return true;
+            }
+            else
+            {
+                return false;
             }
         }
     }

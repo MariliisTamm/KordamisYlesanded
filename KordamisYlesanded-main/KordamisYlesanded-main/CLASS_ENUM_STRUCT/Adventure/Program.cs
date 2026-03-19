@@ -1,4 +1,5 @@
-﻿using Player;
+﻿using static Adventure.Player;
+
 namespace Adventure
 {
     internal class Program
@@ -12,12 +13,12 @@ namespace Adventure
             // 1.1- Tee Player klassi üks klassile kuuluv meetod - CheckHealth()
             //      Checkhealth kontrollib, kui player objekti Health andmeväli on 0 või vähem,
             //      lahutatakse Lives väljalt 1 maha, ja Health seatakse tagasi arvule 100.
-            // 1.2- Tee Player klassi üks enum - public enum Weapon. Sinna pane 3 relva: PlankWithNail, RustyShiv, Knife
+            // 1.2) Tee Player klassi üks enum - public enum Weapon. Sinna pane 3 relva: PlankWithNail, RustyShiv, Knife
 
             // 2 -  Tee World klass, koos nelja andmeväljaga
             //      World klassis on üks konstruktor, kus kasutatakse kõiki andmeid
             //      andmeväljad on: int[,] Map, string WorldName, Point2D Start, Point2D Goal
-            // 2.1- Tee World klassile 6 tühja void meetodit, Event_KratiMõistatus(), Event_Nõid(), Event_Seen(), Event_Nuga(), Event_Mätas(), Event_Pood()
+            // 2.1| Tee World klassile 6 tühja void meetodit, Event_KratiMõistatus(), Event_Nõid(), Event_Seen(), Event_Nuga(), Event_Mätas(), Event_Pood()
             // 2.2| Tee World klassile GenerateMap_1010()
             //      GenerateMap_1010() kasutab randomit, ja tagastab kahemõõtmelise Massiivi koos juhuarvudega vahemikus 1 kuni 6, arvud kaasaarvatud.
             // 2.3- Tee World klassile meetod RandomEncounter()
@@ -27,9 +28,9 @@ namespace Adventure
             // 3 -  Paneme mängu loopi oma objektidega nüüd uuesti kokku - toimub refaktoreerimine monoliitprogrammilt, objektorienteeritud struktuurile
 
             Random rng = new Random();
-            Player player = new Player(3, 100, new Player.Point2D(0, 0), new List<string>(), 0);
             string playAgain = "jah";
-            World map = new World("hello world", player.Location, new Point2D(6,8));
+            World map = new World("helloworld", new Point2D(3, 9), new Point2D(6, 8));
+            Player player = new Player(3, 100, map.StartingPoint, new List<string>(), 0);
 
             do
             {
@@ -38,10 +39,18 @@ namespace Adventure
                 player.DisplayStats();
                 Console.WriteLine("=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=");
 
+                bool didPlayerwin = EventSystem.CheckWin(player.Location, map.Goal);
+                if (didPlayerwin)
+                {
+                    break;
+                }
                 EventSystem.NextEncounter(player, map);
-                EventSystem.NextLocation(player);
+                EventSystem.NextLocation(player, map);
 
                 Console.WriteLine("=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=");
+
+                player.CheckHealth();
+
                 Console.WriteLine("\nVajuta ükskõik mis klahvi et jätkata");
                 Console.ReadLine();
                 Console.Clear();
@@ -56,6 +65,10 @@ namespace Adventure
                 }
             }
             while (player.Lives > 0 || playAgain == "yes");
+            if (player.Lives > 0)
+            {
+                Console.WriteLine("Võitsid");
+            }
             //do //tsükkel
             //{
             //    do
