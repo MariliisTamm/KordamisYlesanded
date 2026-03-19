@@ -34,13 +34,15 @@ namespace Adventure
                 case 6:
                     Event6_Shop(player);
                     break;
+                case 7:
+                    Event7_Fight(player, enemies, boss);
                 default:
                     break;
             }
         }
         public static void NextEncounter(Player player, Random rng)
         {
-            int nextEncounterInt = rng.Next(1, 7);
+            int nextEncounterInt = rng.Next(1, 8);
             switch (nextEncounterInt)
             {
                 case 1:
@@ -60,6 +62,9 @@ namespace Adventure
                     break;
                 case 6:
                     Event6_Shop(player);
+                    break;
+                case 7:
+                    Event7_Fight(player, enemies, boss);
                     break;
                 default:
                     break;
@@ -327,5 +332,8 @@ namespace Adventure
                 return false;
             }
         }
+
+
+
     }
 }

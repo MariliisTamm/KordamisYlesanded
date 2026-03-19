@@ -1,11 +1,11 @@
-﻿using System;
+﻿{using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Adventure
-{
+
     public class Player
     {
         public struct Point2D
@@ -45,6 +45,13 @@ namespace Adventure
         }
 
         /* meetod checkhealth*/
+        public void CheckHealth()
+        {
+            if (Health <= 0)
+            {
+                Lives -= 1;
+                Health = 100;
+            }
+        }
     }
 }
-

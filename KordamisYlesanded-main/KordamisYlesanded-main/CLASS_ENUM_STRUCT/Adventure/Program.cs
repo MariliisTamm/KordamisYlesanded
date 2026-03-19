@@ -31,6 +31,19 @@ namespace Adventure
             string playAgain = "jah";
             World map = new World("helloworld", new Point2D(3, 9), new Point2D(6, 8));
             Player player = new Player(3, 100, map.StartingPoint, new List<string>(), 0);
+            List<Enemy> enemies = new List<Enemy>
+            {
+                    new Enemy("vanamees", 10, "Ah mine poe lehmapõue", 1),
+                    new Enemy("põhjakonn", 20, "...krooks", 5),
+                    new Enemy("elon musk", 1 "Ah mine poe lehmapõue", 1),
+                    new Enemy("ussike", 60, "sststtssss", 25),
+                    new Enemy("bätmän", 10, "im batman", 1),
+                    new Enemy("putin", 10, "blaaa", 1),
+            };
+            Boss boss = new Boss(
+            
+                "kahepoole sõjakirves", 75, "Im Conan", 100, 3, " NOOOT", 100
+             )
 
             do
             {
@@ -44,7 +57,7 @@ namespace Adventure
                 {
                     break;
                 }
-                EventSystem.NextEncounter(player, map);
+                EventSystem.NextEncounter(player, map, enemies, boss);
                 EventSystem.NextLocation(player, map);
 
                 Console.WriteLine("=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=");

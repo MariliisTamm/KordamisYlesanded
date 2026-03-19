@@ -11,20 +11,24 @@ juhuarvuga otsustatakse kas vastaseks on üks kolmest enemy objektist (genereeri
 bossi puhul juhuarvuga otsustatakse kas löök on mööda, boss lööb relvaga või boss lööb käega, tavalise enemy puhul ainult mööda või käega.
 kui boss sureb, on mängijal võimalus relv üles võtta.
 */
-
-public class Enemy
+namespace Adventure
 {
-	public Enemy(string name, int health, int lives, string catchphrase, int hitpower)
+	public class Enemy
 	{
-		Name = name;
-		Health = health;
-		Lives = lives;
-		Catchphrase = catchphrase;
-		Hitpower = hitpower;
-	}
-	public string Name { get; set; }
-	public int Health { get; set; } = 100;
-	public int Lives { get; set; } = 1;
-	public string Catchphrase { get; set; }
-	public int Hitpower { get; set; }
+		
+		public string EnemyName { get; set; }
+		public int EnemyHealth { get; set; } = 100;
+		public int EnemyLives { get; set; } = 1;
+		public string Catchphrase { get; set; }
+		public int HitPower { get; set; }
+
+        public Enemy(string name, int health, int lives, string catchphrase, int hitpower)
+        {
+            Name = name;
+            Health = health;
+            Lives = lives;
+            Catchphrase = catchphrase;
+            Hitpower = hitpower;
+        }
+    }
 }
