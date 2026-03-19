@@ -8,12 +8,16 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Adventure
 {
+    public enum WhatEvent
+    {
+        Kratt, Witch, Mushroom, Knife, Hill, Shop, Fight
+    }
     public class EventSystem
     {
         public static void NextEncounter(Player player, World map)
         {
             Point2D playerlocation = player.Location;
-            int result = map.Map[playerlocation.X, playerlocation.Y];
+            WhatEvent result = (WhatEvent)map.Map[playerlocation.X, playerlocation.Y];
             switch (result)
             {
                 case 1:
@@ -63,57 +67,84 @@ namespace Adventure
                 case 6:
                     Event6_Shop(player);
                     break;
-                case 7:
-                    Event7_Fight(player, enemies, boss);
-                    break;
                 default:
                     break;
             }
         }
+        private static void Event7_Fight(Player player, List<Enemy> enemies, Enemies.Boss boss)
+        {
+            Random generator = new Random();
+            int totalEnemies = enemies.Count;
+            int newChoice = generator.Next(0, totalEnemies);
+            if (newChoice == enemies.Count)
+            {
+                AutoFighter(player, boss);
+            }
+            else
+            {
+                AutoFighter(player, enemies.ElementAt(newChoice));
+            }
+        }
+        private static void AutoFighter(Player player, Enemy? enemy = null, Boss? boss = null)
+        {
+            string name = "";
+            int health = 0;
+            int lives = 0;
+            string msg = "";
+            int power = 0;
+            string bwname = "";
+            int bwpower = 0;
+
+            if (boss == null)
+            {
+                boss = (Boss)
+            }
+            Boss blank = (Boss)enemy;
+        }
 
         private static void Event6_Shop(Player player)
-        {
-            List<string> shelf = new List<string>()
-            {
-                "katkine saabas",
-                "mingi lambipirn",
-                "DDR5 32GB 2x16 kit",
-                "Juustukera",
-                "Kotitäis lambasoolikaid"
-            };
-            List<int> prices = new List<int>()
-            {
-                1000,
-                12,
-                1600,
-                3,
-                -6,
-            };
-            for (int i = 0; i < shelf.Count; i++)
-            {
-                Console.WriteLine($"Riiulil paistab {shelf[i]} ning see maksab {prices[i]}.");
-                Console.WriteLine("Kas sa tahad seda osta? (jah/ei)");
-                string vastus = Console.ReadLine();
-                if (vastus == "jah")
                 {
-                    if (prices[i] < player.Money)
+                    List<string> shelf = new List<string>()
                     {
-                        player.Backpack.Add(shelf[i]);
-                        player.Money -= prices[i];
-                        break;
-                    }
-                    else
+                        "katkine saabas",
+                        "mingi lambipirn",
+                        "DDR5 32GB 2x16 kit",
+                        "Juustukera",
+                        "Kotitäis lambasoolikaid"
+                    };
+                    List<int> prices = new List<int>()
                     {
-                        Console.WriteLine("Sul pole piisavalt raha selle jaoks, vaata midagi muud.");
+                        1000,
+                        12,
+                        1600,
+                        3,
+                        -6,
+                    };
+                    for (int i = 0; i < shelf.Count; i++)
+                    {
+                        Console.WriteLine($"Riiulil paistab {shelf[i]} ning see maksab {prices[i]}.");
+                        Console.WriteLine("Kas sa tahad seda osta? (jah/ei)");
+                        string vastus = Console.ReadLine();
+                        if (vastus == "jah")
+                        {
+                            if (prices[i] < player.Money)
+                            {
+                                player.Backpack.Add(shelf[i]);
+                                player.Money -= prices[i];
+                                break;
+                            }
+                            else
+                            {
+                                Console.WriteLine("Sul pole piisavalt raha selle jaoks, vaata midagi muud.");
+                            }
+                        }
+                        else
+                        {
+                            Console.WriteLine("Vaatad järgmist asja");
+                        }
                     }
+                    Console.WriteLine("Lahkusid poest");
                 }
-                else
-                {
-                    Console.WriteLine("Vaatad järgmist asja");
-                }
-            }
-            Console.WriteLine("Lahkusid poest");
-        }
 
         private static void Event5_Hill(Player player)
         {
